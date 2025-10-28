@@ -9,7 +9,7 @@ export const EditProfileModal = ({ show, handleClose, profile, updateProfile }) 
     programa: '',
     semestre: '',
   });
-  console.log('🚀 ~ EditProfileModal ~ formData:', formData)
+  
 
   useEffect(() => {
     if (profile) {

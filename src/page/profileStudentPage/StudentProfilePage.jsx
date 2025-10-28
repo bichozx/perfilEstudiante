@@ -7,10 +7,11 @@ import { useNavigate } from 'react-router-dom';
 
 export const StudentProfilePage = () => {
   const { user } = useAuth();
-  const { profile, fetchProfile, loading, error } = useProfileStudent();
   
+  const { profile, fetchProfile, loading, error } = useProfileStudent();
   const navigate = useNavigate();
-    
+  
+  
   
 
   useEffect(() => {

@@ -1,21 +1,34 @@
 import React, { useEffect } from "react";
+import { useAuth, useCertificados } from "../../hooks/useAuth";
 
-import { CertificadoListComponent } from '../../components/certificadosComponent/CertificadosComponent';
+import { CertificadoListComponent } from "../../components/certificadosComponent/CertificadosComponent";
 import { Spinner } from "react-bootstrap";
-import { useCertificados } from '../../hooks/useAuth';
 
 export const ListCertificadosPage = () => {
   const {
     certificados,
     loading,
     error,
-    fetchCertificados,
+    fetchPorPerfil,
     eliminarCertificado,
-  } = useCertificados()
+    clearCertificado, // ✅ usamos esta función
+  } = useCertificados();
+    const { user} = useAuth();
+    
+
+  
+  
+  const perfilId = user.perfil.id
+  
 
   useEffect(() => {
-    fetchCertificados();
-  }, [fetchCertificados]);
+    // 🧠 Limpia los certificados cada vez que cambia el usuario
+    clearCertificado();
+
+    if (perfilId) {
+      fetchPorPerfil(perfilId);
+    }
+  }, [perfilId, fetchPorPerfil, clearCertificado]);
 
   const handleDelete = async (certificado) => {
     if (window.confirm(`¿Deseas eliminar el certificado "${certificado.nombre}"?`)) {
@@ -54,11 +67,9 @@ export const ListCertificadosPage = () => {
   }
 
   return (
-    <>
-      <CertificadoListComponent
-        handleDelete={handleDelete}
-        certificados={certificados}
-      />
-    </>
+    <CertificadoListComponent
+      handleDelete={handleDelete}
+      certificados={certificados}
+    />
   );
 };

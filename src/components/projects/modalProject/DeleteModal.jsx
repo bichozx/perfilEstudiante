@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
 
 export const DeleteProjectModal = ({ show, handleClose, onDelete, project }) => {
-  console.log('🚀 ~ DeleteProjectModal ~ project:', project)
+  
   if (!show) return null; // importante: renderiza solo si show=true
 
   return (

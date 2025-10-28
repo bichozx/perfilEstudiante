@@ -1,63 +1,77 @@
 import React, { useEffect, useState } from "react";
+import { useAuth, useProjects } from "../../hooks/useAuth";
 
-import { DeleteProjectModal } from '../../components/projects/modalProject/DeleteModal';
+import { DeleteProjectModal } from "../../components/projects/modalProject/DeleteModal";
 import { EditProjectModal } from "../../components/projects/modalProject/EditProjectModal";
 import { ProjectListComponent } from "../../components/projects/ProjectListComponent";
 import { ViewProjectModal } from "../../components/projects/modalProject/ViewProjectModal";
-import { useProjects } from "../../hooks/useAuth";
 
 export const ProjectListPage = () => {
-  const { projects, fetchProjects, editProject, removeProject  } = useProjects();
+  const {
+    projects,
+    fetchProjectsByProfile,
+    editProject,
+    removeProject,
+    clearProject,
+  } = useProjects();
+  const { user} = useAuth();
+  
 
   const [selectedProject, setSelectedProject] = useState(null);
   const [showView, setShowView] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
+  // 🔥 Obtenemos el perfil del estudiante desde localStorage
+  
+  const perfilId = user.perfil.id
+  
+  
+
   useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
+    // ✅ Limpiamos proyectos previos al cambiar de usuario
+    clearProject();
+
+    if (perfilId) {
+      fetchProjectsByProfile(perfilId);
+    } else {
+      console.warn("No hay perfilId en localStorage");
+    }
+  }, [perfilId, fetchProjectsByProfile, clearProject]);
 
   const handleView = (project) => {
     setSelectedProject(project);
     setShowView(true);
   };
 
-  const handleDeleteClick = (project) => {
-   console.log('🚀 ~ handleDeleteClick ~ project:', project)
-  setSelectedProject(project);
-  setShowDelete(true);
-};
-
-
-const handleDeleteConfirm = async (project) => {
-  if (!project?.id) return;
-  try {
-    console.log("Eliminar proyecto:", project.id);
-    await removeProject(project.id);  // llama al hook con id
-    await fetchProjects();
-  } catch (error) {
-    console.error("Error al eliminar proyecto:", error);
-  }
-};
-
-
   const handleEdit = (project) => {
     setSelectedProject(project);
     setShowEdit(true);
   };
 
-  // ✅ Guardar cambios correctamente
- const handleSaveEdit = async (projectId, payload) => {
-  try {
-    await editProject(projectId, payload);
-    await fetchProjects();
-  } catch (error) {
-    console.error("Error al editar el proyecto:", error);
-  }
-};
+  const handleSaveEdit = async (projectId, payload) => {
+    try {
+      await editProject(projectId, payload);
+      await fetchProjectsByProfile(perfilId);
+    } catch (error) {
+      console.error("Error al editar el proyecto:", error);
+    }
+  };
 
+  const handleDeleteClick = (project) => {
+    setSelectedProject(project);
+    setShowDelete(true);
+  };
 
+  const handleDeleteConfirm = async (project) => {
+    if (!project?.id) return;
+    try {
+      await removeProject(project.id);
+      await fetchProjectsByProfile(perfilId);
+    } catch (error) {
+      console.error("Error al eliminar proyecto:", error);
+    }
+  };
 
   return (
     <div className="container mt-4">
@@ -68,14 +82,12 @@ const handleDeleteConfirm = async (project) => {
         onDelete={handleDeleteClick}
       />
 
-      {/* Modal para ver */}
       <ViewProjectModal
         show={showView}
         handleClose={() => setShowView(false)}
         project={selectedProject}
       />
 
-      {/* Modal para editar */}
       <EditProjectModal
         show={showEdit}
         handleClose={() => setShowEdit(false)}
@@ -83,13 +95,12 @@ const handleDeleteConfirm = async (project) => {
         onSave={handleSaveEdit}
       />
 
-      {/* Modal para eliminar */}
-<DeleteProjectModal
-   show={showDelete}
-  handleClose={() => setShowDelete(false)}
-  onDelete={handleDeleteConfirm}
-  project={selectedProject}
-/>
+      <DeleteProjectModal
+        show={showDelete}
+        handleClose={() => setShowDelete(false)}
+        onDelete={handleDeleteConfirm}
+        project={selectedProject}
+      />
     </div>
   );
 };

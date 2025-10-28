@@ -6,7 +6,11 @@ import { useAuth } from "../../hooks/useAuth";
 
 export const Sidebar = () => {
   const { logout } = useAuth();
+  
   const location = useLocation();
+
+  
+  
 
   const menuItems = [
     { path: "/dashboard/perfil", label: "Mi Perfil", icon: "bi-person" },

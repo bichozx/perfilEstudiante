@@ -67,21 +67,20 @@ export const ProjectProvider = ({ children }) => {
     }
   }, []);
 
-const editProject = useCallback(async (projectId, payload) => {
-  setLoading(true);
-  try {
-    const updated = await updateProject(projectId, payload);
-    setProjects(prev => prev.map(p => (p.id === projectId ? updated : p)));
-  } catch (err) {
-    setError(err.message);
-    throw err;
-  } finally {
-    setLoading(false);
-  }
-}, []);
-
-
-  
+  const editProject = useCallback(async (projectId, payload) => {
+    setLoading(true);
+    try {
+      const updated = await updateProject(projectId, payload);
+      setProjects((prev) =>
+        prev.map((p) => (p.id === projectId ? updated : p))
+      );
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   // 🔹 Eliminar proyecto
   const removeProject = useCallback(async (id, token) => {
@@ -97,6 +96,12 @@ const editProject = useCallback(async (projectId, payload) => {
     }
   }, []);
 
+  // Limpia tanto el proyecto individual como la lista
+  const clearProject = useCallback(() => {
+    setProjects([]); // ✅ limpiar lista de proyectos
+    setProject(null); // ✅ limpiar proyecto seleccionado
+  }, []);
+
   return (
     <ProjectContext.Provider
       value={{
@@ -104,12 +109,13 @@ const editProject = useCallback(async (projectId, payload) => {
         project,
         loading,
         error,
+        clearProject,
         fetchProjects,
         fetchProjectsByProfile,
         addProject,
         editProject,
         removeProject,
-        fetchProjectsById
+        fetchProjectsById,
       }}
     >
       {children}

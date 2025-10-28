@@ -21,12 +21,13 @@ export function AuthProvider({ children }) {
     
 
     // 👇 Extrae los datos reales
-    const { token, role, userId, estudianteId } = res;
+    const { token, role, userId, estudianteId,perfil } = res;
+   
 
     if (!token) throw new Error("No se recibió token del backend");
 
     // 👇 Crea el objeto de usuario que guardaremos
-    const userData = { token, role, userId, estudianteId };
+    const userData = { token, role, userId, estudianteId, perfil };
 
     // 👇 Guarda en localStorage
     localStorage.setItem("token", token);
@@ -41,12 +42,12 @@ export function AuthProvider({ children }) {
   const registerStudent = async (studentData) => {
   try {
     const res = await crearEstudiante(studentData);
-    console.log("🚀 ~ registerStudent ~ soy la data de registro res:", res);
+    
 
     // Opcionalmente, podrías guardar el usuario o token si el backend lo devuelve
     if (res?.usuario) {
-      localStorage.setItem("user", JSON.stringify(res.usuario));
-      setUser(res.usuario);
+      localStorage.setItem("user", JSON.stringify(res));
+      setUser(res);
     }
 
     return res;

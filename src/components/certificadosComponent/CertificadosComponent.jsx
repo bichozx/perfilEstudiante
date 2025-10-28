@@ -3,6 +3,7 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import React from "react";
 
 export const CertificadoListComponent = ({ certificados }) => {
+  
   if (!certificados || certificados.length === 0) {
     return (
       <div className="text-center mt-5 text-muted">

@@ -79,12 +79,15 @@ export const CertificadoProvider = ({ children }) => {
     }
   }, []);
 
+ const clearCertificado = useCallback(() => setCertificados([]), []);
+
   return (
     <CertificadoContext.Provider
       value={{
         certificados,
         loading,
         error,
+        clearCertificado,
         fetchCertificados,
         fetchPorPerfil,
         crearCertificado,

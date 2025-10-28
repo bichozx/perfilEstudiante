@@ -63,12 +63,19 @@ export const HabilidadProvider = ({ children }) => {
     }
   }, []);
 
+  // Limpia tanto el proyecto individual como la lista
+  const clearHabilidad = useCallback(() => {
+    setHabilidades([]); // ✅ limpiar lista de proyectos
+   
+  }, []);
+
   return (
     <HabilidadContext.Provider
       value={{
-        habilidades,
         loading,
         error,
+        habilidades,
+        clearHabilidad,
         fetchHabilidades,
         fetchPorPerfil,
         crearHabilidad,

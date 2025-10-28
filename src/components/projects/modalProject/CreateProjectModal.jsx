@@ -35,6 +35,7 @@ export const CreateProjectModal = ({ show, handleClose }) => {
       };
 
       await addProject(dataToSend);
+      
       alert("Proyecto creado correctamente ✅");
 
       // Limpia el formulario

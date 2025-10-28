@@ -3,10 +3,15 @@ import { useAuth, useProfileStudent } from "../../hooks/useAuth";
 
 import { CreateProfileComponent } from "../../components/profileStuden/CreateProfileComponent";
 import { createProfileStudent } from '../../services/profileStudent/createProfileStudent';
+import { useNavigate } from 'react-router-dom';
 
 export const CreateProfilePage = () => {
+  const navigate = useNavigate();
   const { user, token } = useAuth();
-  const { fetchProfile } = useProfileStudent();
+  
+  
+  const { profiel, fetchProfile } = useProfileStudent();
+  console.log('🚀 ~ CreateProfilePage ~ profiel:', profiel)
 
   const [formData, setFormData] = useState({
     resumen: "",
@@ -26,6 +31,7 @@ export const CreateProfilePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    navigate('/dashboard')
 
     try {
       const dataToSend = { ...formData, estudianteId: user.estudianteId  };
@@ -42,7 +48,7 @@ export const CreateProfilePage = () => {
       });
 
       // Refrescar perfil en el contexto
-      fetchProfile(user.estudianteId);
+      fetchProfile(user.usuario.id);
     } catch (error) {
       console.error(error);
       alert("Error al crear el perfil. Intenta nuevamente.");
