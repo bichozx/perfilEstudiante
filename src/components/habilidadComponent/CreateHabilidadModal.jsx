@@ -1,95 +1,77 @@
-import { Button, Form, Modal } from "react-bootstrap";
 import React, { useState } from "react";
 
+import { ModalComponent } from '../utils/ModalComponent';
 import { useHabilidad } from "../../hooks/useAuth";
 
 export const CreateHabilidadModal = ({ show, handleClose, perfilId }) => {
   const { crearHabilidad } = useHabilidad();
-
-  const [nombre, setNombre] = useState("");
-  const [nivel, setNivel] = useState("");
-  const [tipo, setTipo] = useState("");
+  const [data, setData] = useState({ nombre: "", nivel: "", tipo: "" });
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!nombre.trim()) {
+    if (!data.nombre.trim()) {
       setError("El nombre de la habilidad es obligatorio");
       return;
     }
-
+    setLoading(true);
     try {
-      // Se envía el perfilEstudianteId correctamente en el payload
-      await crearHabilidad(perfilId, {
-        nombre,
-        nivel,
-        tipo,
-        perfilEstudianteId: perfilId,
-      });
-
-      // Limpiar los campos
-      setNombre("");
-      setNivel("");
-      setTipo("");
-      setError("");
-
+      await crearHabilidad(perfilId, { ...data, perfilEstudianteId: perfilId });
+      setData({ nombre: "", nivel: "", tipo: "" });
       handleClose();
-    } catch (err) {
+    } catch {
       setError("Error al crear la habilidad");
-      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Crear Habilidad</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={handleSubmit}>
-          {error && <p className="text-danger">{error}</p>}
-
-          <Form.Group className="mb-3">
-            <Form.Label>Nombre de la habilidad</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Ej: JavaScript, React"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Tipo</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Ej: Tecnológica, Deportiva"
-              value={tipo}
-              onChange={(e) => setTipo(e.target.value)}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Nivel</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Ej: Básico, Intermedio, Avanzado"
-              value={nivel}
-              onChange={(e) => setNivel(e.target.value)}
-            />
-          </Form.Group>
-
-          <div className="d-flex justify-content-end">
-            <Button variant="secondary" onClick={handleClose} className="me-2">
-              Cancelar
-            </Button>
-            <Button type="submit" variant="success">
-              Crear
-            </Button>
-          </div>
-        </Form>
-      </Modal.Body>
-    </Modal>
+    <ModalComponent
+      show={show}
+      title="🧠 Crear Habilidad"
+      onClose={handleClose}
+      onSubmit={handleSubmit}
+      isSubmitting={loading}
+      submitText="Crear"
+    >
+      {error && <p className="text-danger text-center mb-3 fw-semibold">{error}</p>}
+      <div className="mb-3">
+        <label className="form-label fw-semibold">Nombre</label>
+        <input
+          name="nombre"
+          value={data.nombre}
+          onChange={handleChange}
+          className="form-control rounded-3"
+          placeholder="Ej: React, JavaScript"
+        />
+      </div>
+      <div className="mb-3">
+        <label className="form-label fw-semibold">Tipo</label>
+        <input
+          name="tipo"
+          value={data.tipo}
+          onChange={handleChange}
+          className="form-control rounded-3"
+          placeholder="Ej: Técnica, Deportiva"
+        />
+      </div>
+      <div className="mb-3">
+        <label className="form-label fw-semibold">Nivel</label>
+        <input
+          name="nivel"
+          value={data.nivel}
+          onChange={handleChange}
+          className="form-control rounded-3"
+          placeholder="Ej: Básico, Intermedio, Avanzado"
+        />
+      </div>
+    </ModalComponent>
   );
 };
+

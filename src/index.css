@@ -1,17 +1,21 @@
 .sidebar .nav-link {
-  border-radius: 10px;
+  border-radius: 12px;
   transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.3px;
 }
 
 .sidebar .nav-link:hover {
-  background-color: rgba(255, 215, 0, 0.2);
+  background-color: rgba(255, 215, 0, 0.25);
   color: #ffd700 !important;
-  transform: translateX(3px);
+  transform: translateX(5px);
 }
 
 .active-link {
   background-color: #ffd700 !important;
-  color: #03256c !important;
+  color: #001845 !important;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
 }
 
 .sidebar img {
@@ -21,4 +25,158 @@
 body {
   font-family: 'Poppins', 'Segoe UI', sans-serif;
   background-color: #f7f9fc;
+}
+
+/* Navbar mobile */
+.navbar-dark {
+  background-color: #020b24 !important;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .sidebar .nav-link {
+    font-size: 0.95rem;
+  }
+}
+
+/* === Estilo general tipo universidad moderna === */
+.university-title {
+  color: #003366;
+  letter-spacing: 0.5px;
+}
+
+.university-card {
+  border: none;
+  border-radius: 12px;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.university-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.link-university {
+  color: #0056b3;
+  font-weight: 500;
+}
+
+.link-university:hover {
+  color: #002b80;
+}
+
+/* === Footer de los botones === */
+.university-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  background-color: #ffffff;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* === Botones de iconos === */
+.icon-btn {
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+}
+
+/* 🔹 Estilos por tipo */
+.view-btn:hover {
+  color: #003366;
+  background-color: #e6f0ff;
+}
+
+.edit-btn:hover {
+  color: #856404;
+  background-color: #fff3cd;
+}
+
+.delete-btn:hover {
+  color: #8b0000;
+  background-color: #f8d7da;
+}
+
+/* Responsivo */
+@media (max-width: 576px) {
+  .icon-btn {
+    font-size: 0.9rem;
+  }
+}
+
+/* === Card vacía con efecto glassmorphism y borde brillante === */
+.profile-empty-card {
+  position: relative;
+  background: rgba(3, 10, 40, 0.7);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  backdrop-filter: blur(15px);
+  color: #fff;
+  max-width: 520px;
+  overflow: hidden;
+  animation: fadeInCard 0.8s ease;
+  transition: all 0.3s ease;
+}
+
+.profile-empty-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(255, 215, 0, 0.3), transparent 80%);
+  opacity: 0.3;
+  animation: shineBorder 6s infinite linear;
+  pointer-events: none;
+}
+
+/* 🔹 Animación de brillo sutil */
+@keyframes shineBorder {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* 🔹 Animación de aparición */
+@keyframes fadeInCard {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Botón dorado con brillo === */
+.btn-gold-glow {
+  background: linear-gradient(135deg, #ffd700, #ffcc33);
+  color: #1a1a1a;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.btn-gold-glow:hover {
+  background: linear-gradient(135deg, #ffea70, #ffd700);
+  box-shadow: 0 0 18px rgba(255, 215, 0, 0.7);
+  transform: translateY(-2px);
+}
+
+/* Responsivo */
+@media (max-width: 576px) {
+  .profile-empty-card {
+    padding: 2rem 1.5rem;
+  }
 }

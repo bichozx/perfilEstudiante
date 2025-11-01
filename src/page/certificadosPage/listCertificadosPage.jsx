@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useAuth, useCertificados } from "../../hooks/useAuth";
+import { useCertificados, useProfileStudent } from "../../hooks/useAuth";
 
-import { CertificadoListComponent } from "../../components/certificadosComponent/CertificadosComponent";
+import { ItemListComponent } from "../../components/utils/ItemsListComponent";
 import { Spinner } from "react-bootstrap";
 
 export const ListCertificadosPage = () => {
@@ -11,22 +11,23 @@ export const ListCertificadosPage = () => {
     error,
     fetchPorPerfil,
     eliminarCertificado,
-    clearCertificado, // ✅ usamos esta función
+    clearCertificado,
   } = useCertificados();
-    const { user} = useAuth();
-    
 
-  
-  
-  const perfilId = user.perfil.id
-  
+  const { profile } = useProfileStudent();
+
+  console.log("🚀 ~ ListCertificadosPage ~ profile:", profile);
+
+  // ✅ Previene error cuando profile es null
+  const perfilId = profile?.id || null;
 
   useEffect(() => {
-    // 🧠 Limpia los certificados cada vez que cambia el usuario
     clearCertificado();
 
     if (perfilId) {
       fetchPorPerfil(perfilId);
+    } else {
+      console.warn("⚠️ No hay perfilId disponible. El usuario no ha creado su perfil.");
     }
   }, [perfilId, fetchPorPerfil, clearCertificado]);
 
@@ -40,6 +41,18 @@ export const ListCertificadosPage = () => {
       }
     }
   };
+
+  // ⚠️ Si no existe perfil, mostramos un mensaje informativo
+  if (!perfilId) {
+    return (
+      <div className="container text-center mt-5">
+        <h4 className="fw-bold text-primary mb-3">🎓 Aún no tienes un perfil creado</h4>
+        <p className="text-muted">
+          Crea primero tu perfil de estudiante para poder registrar y visualizar tus certificados.
+        </p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -67,9 +80,12 @@ export const ListCertificadosPage = () => {
   }
 
   return (
-    <CertificadoListComponent
-      handleDelete={handleDelete}
-      certificados={certificados}
+    <ItemListComponent
+      title="Mis Certificados"
+      items={certificados}
+      fields={["Fecha", "institucion"]}
+      linkField="urlArchivo"
+      onDelete={handleDelete}
     />
   );
 };

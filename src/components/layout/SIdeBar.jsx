@@ -1,31 +1,27 @@
 import { Link, useLocation } from "react-router-dom";
 
 import React from "react";
-import universityBg from "../../assets/photo-1503676260728-1c00da094a0b.jpg";
+import universityBg from "../../assets/stock-photo-knowledge-concept-business-man-students-studying-researching-on-e-learning-for-training-and-2469762987.jpg"; // imagen nueva tipo universidad
 import { useAuth } from "../../hooks/useAuth";
 
 export const Sidebar = () => {
   const { logout } = useAuth();
-  
   const location = useLocation();
 
-  
-  
-
   const menuItems = [
-    { path: "/dashboard/perfil", label: "Mi Perfil", icon: "bi-person" },
-    { path: "/dashboard/lista-proyectos", label: "Mis Proyectos", icon: "bi-folder2" },
-    { path: "/dashboard/lista-certificados", label: "Mis Certificados", icon: "bi-award" },
-    { path: "/dashboard/lista-habilidades", label: "Mis Habilidades", icon: "bi-award" },
+    { path: "/dashboard/perfil", label: "Mi Perfil", icon: "bi-person-circle" },
+    { path: "/dashboard/lista-proyectos", label: "Mis Proyectos", icon: "bi-journal-bookmark-fill" },
+    { path: "/dashboard/lista-certificados", label: "Mis Certificados", icon: "bi-mortarboard-fill" },
+    { path: "/dashboard/lista-habilidades", label: "Mis Habilidades", icon: "bi-lightbulb-fill" },
   ];
 
   return (
     <>
       {/* Navbar superior visible solo en móvil */}
       <nav
-        className="navbar navbar-dark bg-dark d-md-none"
+        className="navbar navbar-dark d-md-none shadow-sm"
         style={{
-          backgroundImage: `linear-gradient(rgba(3, 4, 24, 0.9), rgba(3, 4, 24, 0.9)), url(${universityBg})`,
+          backgroundImage: `linear-gradient(135deg, rgba(3, 10, 40, 0.95), rgba(3, 10, 40, 0.85)), url(${universityBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -49,31 +45,28 @@ export const Sidebar = () => {
         id="offcanvasSidebar"
         tabIndex="-1"
         style={{
-          backgroundImage: `linear-gradient(rgba(3, 4, 24, 0.9), rgba(3, 4, 24, 0.9)), url(${universityBg})`,
+          backgroundImage: `linear-gradient(135deg, rgba(3, 10, 40, 0.95), rgba(3, 10, 40, 0.85)), url(${universityBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          boxShadow: "2px 0 10px rgba(0,0,0,0.3)",
+          boxShadow: "2px 0 12px rgba(0,0,0,0.35)",
         }}
       >
         <div className="offcanvas-header d-flex d-md-none">
           <h5 className="offcanvas-title text-warning fw-bold">Portal Estudiantil</h5>
-          <button
-            type="button"
-            className="btn-close btn-close-white"
-            data-bs-dismiss="offcanvas"
-          ></button>
+          <button type="button" className="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
         </div>
 
         <div className="offcanvas-body d-flex flex-column p-4">
           <div className="text-center mb-4">
             <img
-              src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png"
+              src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
               alt="Logo universidad"
-              width="70"
-              className="mb-2"
+              width="80"
+              className="mb-3"
+              style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.4))" }}
             />
             <h5 className="fw-bold text-uppercase text-warning d-none d-md-block">
-              Portal Estudiantil
+              Universidad Virtual
             </h5>
           </div>
 
@@ -82,14 +75,14 @@ export const Sidebar = () => {
               <li key={item.path} className="nav-item">
                 <Link
                   to={item.path}
-                  className={`nav-link mb-2 fw-semibold ${
+                  className={`nav-link d-flex align-items-center gap-2 py-2 px-3 mb-2 fw-semibold ${
                     location.pathname === item.path
                       ? "active-link"
                       : "text-light"
                   }`}
                   data-bs-dismiss="offcanvas"
                 >
-                  <i className={`bi ${item.icon} me-2`}></i>
+                  <i className={`bi ${item.icon} fs-5`}></i>
                   {item.label}
                 </Link>
               </li>
@@ -99,7 +92,8 @@ export const Sidebar = () => {
           <div className="mt-auto">
             <button
               onClick={logout}
-              className="btn btn-outline-light w-100 fw-semibold"
+              className="btn btn-outline-light w-100 fw-semibold py-2"
+              style={{ borderRadius: "12px" }}
             >
               <i className="bi bi-box-arrow-right me-2"></i>Salir
             </button>

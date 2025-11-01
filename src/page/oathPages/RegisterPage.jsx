@@ -16,13 +16,36 @@ import { yupResolver } from "@hookform/resolvers/yup";
 // ✅ Esquema de validación
 const schema = yup.object({
   programa: yup.string().required("El programa es obligatorio"),
-  semestre: yup.string().required("El semestre es obligatorio"),
-  promedio: yup.number().min(0).max(5).required("El promedio es obligatorio"),
-  fechaNacimiento: yup.date().required("La fecha de nacimiento es obligatoria"),
+  semestre: yup
+    .number()
+    .typeError("El semestre debe ser un número")
+    .min(1, "El semestre mínimo es 1")
+    .max(12, "El semestre máximo es 12")
+    .required("El semestre es obligatorio"),
+
+  promedio: yup
+    .number()
+    .typeError("El promedio debe ser un número válido (puede tener decimales)")
+    .min(0, "El promedio no puede ser menor que 0")
+    .max(5, "El promedio no puede ser mayor que 5")
+    .required("El promedio es obligatorio"),
+
+  fechaNacimiento: yup
+    .date()
+    .typeError("Debe seleccionar una fecha válida")
+    .required("La fecha de nacimiento es obligatoria"),
+
   nombre: yup.string().required("El nombre es obligatorio"),
-  correo: yup.string().email("Correo inválido").required("El correo es obligatorio"),
-  password: yup.string().min(6, "Mínimo 6 caracteres").required("La contraseña es obligatoria"),
+  correo: yup
+    .string()
+    .email("Correo inválido")
+    .required("El correo es obligatorio"),
+  password: yup
+    .string()
+    .min(6, "Mínimo 6 caracteres")
+    .required("La contraseña es obligatoria"),
 });
+
 
 export const RegisterPage = () => {
   const { registerStudent } = useAuth(); // 👈 accede al contexto

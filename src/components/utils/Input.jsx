@@ -1,17 +1,27 @@
-export default function Input({ label, register, name, type = 'text', placeholder, required, error }) {
+
+export default function Input({
+  label,
+  name,
+  type = "text",
+  register,
+  error,
+  ...rest
+}) {
+  const registerOptions =
+    type === "number"
+      ? { valueAsNumber: true } // convierte el string a número
+      : {};
+
   return (
     <div className="mb-3">
-      {label && <label className="form-label">{label}</label>}
+      <label className="form-label fw-semibold">{label}</label>
       <input
-        className="form-control"
-        {...register(name)}
         type={type}
-        placeholder={placeholder}
-        required={required}
+        className={`form-control ${error ? "is-invalid" : ""}`}
+        {...register(name, registerOptions)}
+        {...rest}
       />
-      {error && <p className="text-danger small">{error}</p>}
+      {error && <div className="invalid-feedback">{error}</div>}
     </div>
   );
 }
-
-

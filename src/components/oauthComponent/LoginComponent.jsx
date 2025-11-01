@@ -1,4 +1,3 @@
-// src/components/oauthComponent/LoginComponent.jsx
 import Input from "../utils/Input";
 import React from "react";
 import Spinner from "../utils/Spinner";

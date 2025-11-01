@@ -2,16 +2,11 @@ import React, { useState } from "react";
 import { useAuth, useProfileStudent } from "../../hooks/useAuth";
 
 import { CreateProfileComponent } from "../../components/profileStuden/CreateProfileComponent";
-import { createProfileStudent } from '../../services/profileStudent/createProfileStudent';
-import { useNavigate } from 'react-router-dom';
+import ToastMessage from "../../components/utils/Toast"; // asegúrate de importar la ruta correcta
 
 export const CreateProfilePage = () => {
-  const navigate = useNavigate();
-  const { user, token } = useAuth();
-  
-  
-  const { profiel, fetchProfile } = useProfileStudent();
-  console.log('🚀 ~ CreateProfilePage ~ profiel:', profiel)
+  const { user } = useAuth();
+  const { createProfile } = useProfileStudent();
 
   const [formData, setFormData] = useState({
     resumen: "",
@@ -21,7 +16,16 @@ export const CreateProfilePage = () => {
     semestre: "",
   });
 
+  
+
   const [loading, setLoading] = useState(false);
+
+  // Estados del toast
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,38 +35,68 @@ export const CreateProfilePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    navigate('/dashboard')
 
     try {
-      const dataToSend = { ...formData, estudianteId: user.estudianteId  };
-      await createProfileStudent(dataToSend, token);
+      const dataToSend = {
+        ...formData,
+        estudianteId: user?.estudianteId || user?.userId,
+      };
 
-      alert("Perfil creado correctamente");
-      setFormData({
-        estudianteId:"",
-        resumen: "",
-        intereses: "",
-        experiencia: "",
-        programa: "",
-        semestre: "",
-      });
+      const newProfile = await createProfile(dataToSend, user.token);
 
-      // Refrescar perfil en el contexto
-      fetchProfile(user.usuario.id);
+      if (newProfile) {
+        setToast({
+          show: true,
+          message: "✅ Perfil creado correctamente",
+          type: "success",
+        });
+        setFormData({
+          resumen: "",
+          intereses: "",
+          experiencia: "",
+          programa: "",
+          semestre: "",
+        });
+      }
     } catch (error) {
-      console.error(error);
-      alert("Error al crear el perfil. Intenta nuevamente.");
+      console.error("❌ Error al crear perfil:", error);
+      setToast({
+        show: true,
+        message: "❌ Error al crear el perfil. Intenta nuevamente.",
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <CreateProfileComponent
-      handleSubmit={handleSubmit}
-      handleChange={handleChange}
-      formData={formData}
-      loading={loading}
-    />
+    <>
+      <CreateProfileComponent
+        handleSubmit={handleSubmit}
+        handleChange={handleChange}
+        formData={formData}
+        loading={loading}
+      />
+
+      {/* Toast flotante */}
+      <div
+        style={{
+          position: "fixed",
+          top: 20,
+          right: 20,
+          zIndex: 9999,
+        }}
+      >
+        <ToastMessage
+          message={toast.message}
+          type={toast.type}
+          show={toast.show}
+          onClose={() => setToast((prev) => ({ ...prev, show: false }))}
+        />
+      </div>
+    </>
   );
 };
+
+
